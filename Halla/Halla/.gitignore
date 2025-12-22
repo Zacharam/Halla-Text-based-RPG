@@ -16,3 +16,15 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
+
+# Moje vlastní ignorované soubory a složky
+/_ImportDWG/
+/AllInOne/
+/DelkaVodicu/
+/ExportPDF/
+/K2ExpCSV/
+/K2Insert/
+/Tabulka/
+/Uzly/
+/VlozText/
+/Vyrez/
