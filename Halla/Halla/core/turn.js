@@ -31,7 +31,7 @@
     /**
      * Pomocná funkce pro sebrání předmětu z místnosti.
      * @param {string} itemName - Název předmětu k sebrání.
-     * @returns {boolean} True, pokud byl předmět úspěšně sebrán.
+     * @returns {string|boolean} Název sebraného předmětu nebo false.
      */
     function _takeItem(itemName) {
         var gs = Halla.gameState;
@@ -47,12 +47,11 @@
                     // Pokud je to dynamický item, neukládáme ho do inventáře, ale do speciálního slotu
                     if (Halla.DYNAMIC_ITEMS && Halla.DYNAMIC_ITEMS[item]) {
                         gs.dynamicItemLocations[item] = "inventory"; // Označíme, že ho má hráč
-                        Halla.showInfo("Vzal jsi: " + item);
-                        return false; // Neposouvá tah, ale vrací false, protože se nejedná o standardní sebrání
+                        return item; // Vracíme název itemu (truthy), aby volající věděl, že akce proběhla
                     }
 
                     Halla.giveItemToInventory(item);
-                    return true;
+                    return item;
                 }
             }
         }
@@ -134,15 +133,16 @@
             return { advanceTurn: _enterSecretRoom(), actionType: "move" };
         },
         "vezmi": function(target) {
-            if (_takeItem(target)) {
+            var takenItem = _takeItem(target);
+            if (takenItem) {
                 Halla.gameState.stats.itemsPicked = (Halla.gameState.stats.itemsPicked || 0) + 1;
-                Halla.showInfo("Vzal jsi: " + target);
-                if (target === "Diplom" && !Halla.hasPerk("OVRmind")) {
+                Halla.showInfo("Vzal jsi: " + takenItem);
+                if (takenItem === "Diplom" && !Halla.hasPerk("OVRmind")) {
                     Halla.showInfo("Diplom ti otevírá dveře k vyššímu utrpení...");
                 }
 
                 // Zkontrolujeme, zda sebraný předmět není zbytečný (pro achievement)
-                if (Halla.JUNK_ITEMS && Halla.JUNK_ITEMS.indexOf(target) !== -1) {
+                if (Halla.JUNK_ITEMS && Halla.JUNK_ITEMS.indexOf(takenItem) !== -1) {
                     var gs = Halla.gameState;
                     gs.stats.pickedJunkItem = true;
 
@@ -151,7 +151,7 @@
                         if (!gs.stats.junkItemsPicked) {
                             gs.stats.junkItemsPicked = new Object();
                         }
-                        gs.stats.junkItemsPicked[target] = true;
+                        gs.stats.junkItemsPicked[takenItem] = true;
 
                         var uniqueJunkCount = Object.keys(gs.stats.junkItemsPicked).length;
                         if (uniqueJunkCount >= Halla.BALANCE.scroungerPerkRequirement) {

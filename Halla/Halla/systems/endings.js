@@ -82,11 +82,11 @@
                        Halla.hasItemInInventory("Kámen");
             },
             interactive: {
-                question: "Stojíš v kuchyňce OVR, v ruce držíš Kámen. Zíráš na mikrovlnku a napadne tě geniální/stupidní nápad...\n\nChceš hodit Kámen do mikrovlnky?",
+                question: "Stojíš v kuchyňce OVR, v ruce držíš Kámen. Zíráš na server a napadne tě geniální/stupidní nápad...\n\nChceš hodit Kámen do serveru?",
                 yesText: "Ano, hodit!",
                 noText: "Ne, to je blbost",
                 onYes: {
-                    message: "S uspokojivým křupnutím se Kámen zaboří do dvířek mikrovlnky. Všechno zhasne.\nV Halle zavládne tma a ticho. Možná jsi to všechno rozbil. Možná jsi všechny zachránil.\n\nKaždopádně máš padla. (Sabotáž ending)"
+                    message: "S uspokojivým křupnutím se Kámen zaboří do dvířek serveru. Všechno zhasne.\nV Halle zavládne tma a ticho. Možná jsi to všechno rozbil. Možná jsi všechny zachránil.\n\nKaždopádně máš padla. (Sabotáž ending)"
                 },
                 onNo: {
                     message: "Nakonec si to rozmyslíš. Ještě bys to musel platit. Schováš Kámen zpátky do kapsy.",
