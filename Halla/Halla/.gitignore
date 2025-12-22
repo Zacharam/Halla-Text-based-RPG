@@ -18,13 +18,13 @@ yarn-error.log*
 *.sw?
 
 # Moje vlastní ignorované soubory a složky
-/_ImportDWG/
-/AllInOne/
-/DelkaVodicu/
-/ExportPDF/
-/K2ExpCSV/
-/K2Insert/
-/Tabulka/
-/Uzly/
-/VlozText/
-/Vyrez/
+Halla/_ImportDWG/
+Halla/AllInOne/
+Halla/DelkaVodicu/
+Halla/ExportPDF/
+Halla/K2ExpCSV/
+Halla/K2Insert/
+Halla/Tabulka/
+Halla/Uzly/
+Halla/VlozText/
+Halla/Vyrez/
