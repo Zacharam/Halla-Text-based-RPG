@@ -19,7 +19,7 @@ Halla je tahová adventura napsaná v JavaScriptu (QtScript) pro QCAD. Hrajete z
 ## 🚀 Instalace a Spuštění
 
 1.  Ujistěte se, že máte nainstalovaný **QCAD** (hra využívá QCAD API). https://www.qcad.org/archives/qcad/qcad-3.32.5-trial-win64.zip
-2.  Složku `Halla-Text-based-RPG-main` umístěte do adresáře se skripty QCADu.
+2.  Obsah složky `Halla-Text-based-RPG-main` umístěte do adresáře se skripty QCADu.
     *   Cesta obvykle vypadá takto: `.../QCAD/scripts/`
 3.  Spusťte QCAD.
 4.  Hru spustíte pomocí ikony Halla nebo v hlavním menu Halla->spustit hru Halla
