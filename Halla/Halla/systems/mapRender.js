@@ -188,12 +188,17 @@
         var playerLines = [];
 
         for (y = 0; y < baseMap.length; y++) {
-            playerLines.push(" ".repeat(baseMap[y].length));
+            // Bezpečnější náhrada za .repeat() a kontrola délky řádku
+            var emptyLine = "";
+            var len = (baseMap[y]) ? baseMap[y].length : 0;
+            for (var k = 0; k < len; k++) emptyLine += " ";
+            playerLines.push(emptyLine);
         }
 
         // --- FOG OF WAR: Aktualizace masky ---
-        var pos = Halla.ROOM_CHAR_POS[gs.currentRoom];
-        if (pos) {
+        var pos = (gs.currentRoom && Halla.ROOM_CHAR_POS) ? Halla.ROOM_CHAR_POS[gs.currentRoom] : null;
+
+        if (pos && playerLines[pos.y]) {
             // Pokud nejsme v replayi (kamery vidí vše), aktualizujeme mlhu
             if (!gs.isReplay) {
                 updateExplorationMask(gs, pos, baseMap);
@@ -201,7 +206,7 @@
 
             var rowChars = playerLines[pos.y].split("");
             if (pos.x >= 0 && pos.x < rowChars.length) {
-                var playerChar = Halla.MAP_SYMBOLS.player;
+                var playerChar = (Halla.MAP_SYMBOLS && Halla.MAP_SYMBOLS.player) ? Halla.MAP_SYMBOLS.player : "@";
                 if (gs.ivcaBuffTurns > 0) {
                     playerChar = Halla.MAP_SYMBOLS.player_ivca;
                 } else if (gs.hasJindra) {
