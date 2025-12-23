@@ -146,6 +146,39 @@
         }
     }
 
+    /**
+     * Aktualizuje masku objevené mapy (Fog of War) kolem pozice hráče.
+     */
+    function updateExplorationMask(gs, playerPos, mapLines) {
+        if (!gs.explorationMask) {
+            gs.explorationMask = [];
+        }
+
+        // Poloměr viditelnosti (elipsa)
+        var radX = 18;
+        var radY = 10;
+
+        var startY = Math.max(0, playerPos.y - radY);
+        var endY = Math.min(mapLines.length, playerPos.y + radY);
+
+        for (var y = startY; y < endY; y++) {
+            var lineLen = mapLines[y].length;
+            if (!gs.explorationMask[y]) gs.explorationMask[y] = []; // Inicializace řádku
+
+            var startX = Math.max(0, playerPos.x - radX);
+            var endX = Math.min(lineLen, playerPos.x + radX);
+
+            for (var x = startX; x < endX; x++) {
+                var dx = x - playerPos.x;
+                var dy = y - playerPos.y;
+                // Rovnice elipsy pro odhalení oblasti <= 1.0
+                if ((dx * dx) / (radX * radX) + (dy * dy) / (radY * radY) <= 1.0) {
+                    gs.explorationMask[y][x] = true;
+                }
+            }
+        }
+    }
+
     function generateAsciiMap() {
         var y, x;
         var gs = Halla.gameState;
@@ -158,8 +191,14 @@
             playerLines.push(" ".repeat(baseMap[y].length));
         }
 
+        // --- FOG OF WAR: Aktualizace masky ---
         var pos = Halla.ROOM_CHAR_POS[gs.currentRoom];
         if (pos) {
+            // Pokud nejsme v replayi (kamery vidí vše), aktualizujeme mlhu
+            if (!gs.isReplay) {
+                updateExplorationMask(gs, pos, baseMap);
+            }
+
             var rowChars = playerLines[pos.y].split("");
             if (pos.x >= 0 && pos.x < rowChars.length) {
                 var playerChar = Halla.MAP_SYMBOLS.player;
@@ -275,8 +314,28 @@
             }
         }
 
+        // --- FOG OF WAR: Aplikace masky na pozadí ---
+        var maskedBgLines = [];
+        for (y = 0; y < baseMap.length; y++) {
+            // V replay módu vidíme celou mapu, jinak aplikujeme masku
+            if (gs.isReplay) {
+                maskedBgLines.push(baseMap[y]);
+            } else {
+                var line = baseMap[y];
+                var maskedLine = "";
+                for (x = 0; x < line.length; x++) {
+                    if (gs.explorationMask && gs.explorationMask[y] && gs.explorationMask[y][x]) {
+                        maskedLine += line[x];
+                    } else {
+                        maskedLine += " "; // Neobjevená oblast = mezera (tma)
+                    }
+                }
+                maskedBgLines.push(maskedLine);
+            }
+        }
+
         return {
-            background: baseMap.join("\n"),
+            background: maskedBgLines.join("\n"),
             player: playerLines.join("\n")
         };
     }
